@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anatomy Master: Muscles, Nerves & Vessels</title>
+    <style>
+        :root {
+            /* Dark Mode Palette */
+            --primary: #2dd4bf; /* Bright Teal for highlight/primary actions */
+            --secondary: #0d9488; /* Darker Teal for hover */
+            --bg: #000000; /* Black background */
+            --card: #1f2937; /* Dark Gray card background */
+            --text: #ffffff; /* White text */
+            --text-secondary: #9ca3af; /* Light Gray secondary text */
+            --success: #84cc16; /* Lime Green for correct */
+            --error: #f87171; /* Light Red for error */
+            --border: #374151; /* Medium Gray border */
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: var(--card);
+            width: 100%;
+            max-width: 650px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Darker shadow */
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 16px;
+        }
+
+        h1 {
+            color: var(--text); /* Changed to white */
+            font-size: 1.8rem;
+            margin: 0 0 10px 0;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            background: #374151; /* Slightly lighter dark gray for stats */
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-weight: 600;
+            color: var(--primary); /* Keep stats text colorful */
+        }
+
+        /* Question Styles */
+        .question-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            line-height: 1.4;
+            color: var(--text); /* Ensure question text is white */
+        }
+
+        /* Highlights (for bold text and muscle name) */
+        .question-text b {
+            color: var(--text); /* Keep bold text white */
+            font-weight: 700;
+        }
+
+        .highlight {
+            color: var(--primary); /* Muscle name color (Teal) */
+        }
+        
+        /* Options Grid */
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Buttons (Standard Choice) */
+        .choice-btn {
+            padding: 16px;
+            border: 2px solid var(--border);
+            background: var(--card);
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            color: var(--text);
+        }
+
+        .choice-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            background: #374151;
+        }
+
+        .choice-btn.correct {
+            background: #166534; /* Darker green background */
+            border-color: var(--success);
+            color: #ecfccb; /* Very light green text */
+        }
+
+        .choice-btn.wrong {
+            background: #9f1239; /* Darker red background */
+            border-color: var(--error);
+            color: #fee2e2; /* Light red text */
+            opacity: 1.0;
+        }
+
+        /* Checkboxes (Function Mode) */
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+            background: var(--card);
+        }
+
+        .checkbox-label:hover {
+            background: #374151;
+        }
+
+        .checkbox-label input {
+            width: 20px;
+            height: 20px;
+            margin-right: 15px;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-label.correct-highlight {
+            background: #166534;
+            border-color: var(--success);
+        }
+
+        .checkbox-label.wrong-highlight {
+            background: #9f1239;
+            border-color: var(--error);
+        }
+        
+        /* Missed correct answer hint */
+        .checkbox-label[style*="dashed"] {
+            border: 2px dashed var(--success) !important;
+            background: #1f2937 !important; /* Keep original dark background */
+        }
+
+        /* Controls */
+        .btn-primary {
+            margin-top: 24px;
+            padding: 14px;
+            background: var(--primary);
+            color: var(--card); /* Dark text on bright button */
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-end {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin-top: 30px;
+            align-self: center;
+            transition: all 0.2s;
+        }
+
+        .btn-end:hover {
+            background: var(--border);
+            color: var(--text);
+        }
+
+        /* Feedback Area */
+        .feedback-area {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 8px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .feedback-correct {
+            background: #166534;
+            color: #ecfccb;
+            border: 1px solid var(--success);
+        }
+
+        .feedback-wrong {
+            background: #9f1239;
+            color: #fee2e2;
+            border: 1px solid var(--error);
+        }
+
+        /* Results Screen */
+        .results-screen {
+            display: none;
+            text-align: center;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            background: var(--primary);
+            color: var(--card); /* Dark text on bright circle */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0 auto 20px auto;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container" id="quiz-container">
+    <header>
+        <h1>Anatomy Master</h1>
+        <div class="subtitle">Muscles, Nerves & Vessels</div>
+    </header>
+
+    <div class="stats-bar">
+        <span>Correct: <span id="score-display">0</span></span>
+        <span>Questions: <span id="total-display">0</span></span>
+    </div>
+
+    <div id="quiz-content">
+        <div class="question-label" id="q-type">MUSCLE ORIGIN</div>
+        <div class="question-text" id="q-text">Loading...</div>
+
+        <div id="options-area" class="options-grid">
+            <!-- Options injected here -->
+        </div>
+
+        <button id="submit-btn" class="btn-primary" style="display:none;" onclick="checkFunctionAnswer()">Submit Answer</button>
+        
+        <div id="feedback" class="feedback-area"></div>
+        
+        <button id="next-btn" class="btn-primary" style="display:none;" onclick="nextQuestion()">Next Question &rarr;</button>
+    </div>
+
+    <button class="btn-end" onclick="endQuiz()">End Quiz & View Results</button>
+</div>
+
+<!-- Results Screen -->
+<div class="container results-screen" id="results-container">
+    <h1>Quiz Completed!</h1>
+    <div class="score-circle" id="final-score">0%</div>
+    <p>You answered <strong id="final-correct">0</strong> questions correctly out of <strong id="final-total">0</strong>.</p>
+    <button class="btn-primary" onclick="location.reload()">Restart Quiz</button>
+</div>
+
+<script>
+    // --- DATABASE ---
+    // Compiled from ALL screenshots provided (Arteries, Nerves, O/I/F)
+    
+    const muscles = [
+        // --- Anterior Thigh (Låret- främre) [New Data] ---
+        {
+            name: "m. iliacus",
+            origin: "fossa iliaca",
+            insertion: "trochanter minor",
+            function: ["flexion", "external rotation"],
+            nerve: "n. femoralis",
+            artery: "a. femorale circumflexus mediale"
+        },
+        {
+            name: "m. psoas major",
+            origin: "Th12-L5 lateralt på kotkropparna",
+            insertion: "trochanter minor",
+            function: ["flexion", "external rotation"],
+            nerve: "plexus lumbale",
+            artery: "a. femorale circumflexus mediale"
+        },
+        {
+            name: "m. vastus lateralis",
+            origin: "trochanter major",
+            insertion: "tuberositas tibia",
+            function: ["extension"],
+            nerve: "n. femoralis",
+            artery: "a. femorale"
+        },
+        {
+            name: "m. vastus intermedius",
+            origin: "anteriort femur",
+            insertion: "tuberositas tibia",
+            function: ["extension"],
+            nerve: "n. femoralis",
+            artery: "a. femorale"
+        },
+        {
+            name: "m. vastus medialis",
+            origin: "labium mediale lineae asperae",
+            insertion: "tuberositas tibia",
+            function: ["extension"],
+            nerve: "n. femoralis",
+            artery: "a. femorale"
+        },
+        {
+            name: "m. rectus femoris",
+            origin: "spina iliaca anterior inferior",
+            insertion: "tuberositas tibia",
+            function: ["hip flexion", "knee extension"],
+            nerve: "n. femoralis",
+            artery: "a. femorale"
+        },
+        {
+            name: "m. sartorius",
+            origin: "spina iliaca anterior superior",
+            insertion: "medialt om tuberositas tibia (pes anserinus)",
+            function: ["flexion", "external rotation", "knee flexion"],
+            nerve: "n. femoralis",
+            artery: "a. femorale"
+        },
+
+        // --- Gluteal Region ---
+        {
+            name: "m. gluteus maximus",
+            origin: "os ilium, os sacrum, os coccygis, lig. sacrotuberale",
+            insertion: "tractus iliotibialis, linea aspera, tuberositas glutea",
+            function: ["extension", "external rotation"],
+            nerve: "n. gluteus inferior",
+            artery: "a. glutues superior, a. gluteus inferior"
+        },
+        {
+            name: "m. tensor fascia lata",
+            origin: "intill spina iliaca anterior superior",
+            insertion: "tractus iliotibialis",
+            function: ["flexion", "abduction", "internal rotation"],
+            nerve: "n. gluteus superior",
+            artery: "a. circumflexus femoris laterale, a. gluteus superior"
+        },
+        {
+            name: "m. gluteus medius",
+            origin: "os ilium",
+            insertion: "trochanter major",
+            function: ["abduction", "internal/external rotation", "flexion", "extension"],
+            nerve: "n. gluteus superior",
+            artery: "a. gluteus superior"
+        },
+        {
+            name: "m. gluteus minimus",
+            origin: "os ilium",
+            insertion: "trochanter major",
+            function: ["abduction", "internal/external rotation", "flexion", "extension"],
+            nerve: "n. gluteus superior",
+            artery: "a. gluteus superior"
+        },
+        {
+            name: "m. piriformis",
+            origin: "sacrum anteriort",
+            insertion: "trochanter major",
+            function: ["abduction", "external rotation"],
+            nerve: "plexus sacralis",
+            artery: "a. gluteus superior, a. gluteus inferior"
+        },
+        {
+            name: "m. gemellus superior",
+            origin: "spina ischiadica",
+            insertion: "m. obturatorius internus sena",
+            function: ["abduction", "adduction", "external rotation"],
+            nerve: "plexus sacralis",
+            artery: "a. gluteus inferior"
+        },
+        {
+            name: "m. obturatorius internus",
+            origin: "membrana obturatorius",
+            insertion: "fossa trochanterica",
+            function: ["abduction", "external rotation"],
+            nerve: "plexus sacralis",
+            artery: "a. gluteus inferior"
+        },
+        {
+            name: "m. gemellus inferior",
+            origin: "tuber ischiadicum",
+            insertion: "m. obturatorius internus sena",
+            function: ["abduction", "adduction", "external rotation"],
+            nerve: "plexus sacralis",
+            artery: "a. gluteus inferior"
+        },
+        {
+            name: "m. quadratus femoris",
+            origin: "tuber ischiadicum",
+            insertion: "crista intertrochanterica",
+            function: ["adduction", "external rotation"],
+            nerve: "plexus sacralis",
+            artery: "a. gluteus inferior"
+        },
+
+        // --- Medial Thigh ---
+        {
+            name: "m. adductor longus",
+            origin: "intill symfysen",
+            insertion: "labium mediale linea asperae",
+            function: ["adduction", "flexion", "external rotation"],
+            nerve: "n. obturatorius",
+            artery: "a. femorale profundus, a. obturatorius"
+        },
+        {
+            name: "m. adductor magnus",
+            origin: "ramus inferior ossis pubis, ramus ossis ischii",
+            insertion: "labium mediale linea asperae, epicondylus mediale",
+            function: ["adduction", "extension", "external/internal rotation"],
+            nerve: "n. obturatorius, n. tibialis",
+            artery: "a. femorale profundus, a. obturatorius"
+        },
+        {
+            name: "m. gracilis",
+            origin: "ramus inferior ossis pubis",
+            insertion: "medialt om tuberositas tibia (pes anserinus)",
+            function: ["adduction", "internal rotation", "knee flexion"],
+            nerve: "n. obturatorius",
+            artery: "a. femorale circumflexus mediale, a. obturatorius"
+        },
+        {
+            name: "m. obturatorius externus",
+            origin: "membrana obturatorius",
+            insertion: "fossa trochanterica",
+            function: ["adduction", "external rotation"],
+            nerve: "n. obturatorius",
+            artery: "a. obturatorius"
+        },
+        {
+            name: "m. adductor brevis",
+            origin: "ramus inferior ossis pubis",
+            insertion: "labium mediale linea asperae",
+            function: ["adduction", "external rotation"],
+            nerve: "n. obturatorius",
+            artery: "a. femorale profundus, a. obturatorius"
+        },
+        {
+            name: "m. pectineus",
+            origin: "pecten ossis pubis",
+            insertion: "linea pectinea, linea aspera",
+            function: ["adduction", "internal rotation"],
+            nerve: "n. obturatorius, n. femoralis",
+            artery: "a. obturatorius"
+        },
+
+        // --- Posterior Thigh ---
+        {
+            name: "m. biceps femoris caput brevis",
+            origin: "labium laterale linea aspera",
+            insertion: "caput fibulae",
+            function: ["flexion", "external rotation"],
+            nerve: "n. peroneus communis",
+            artery: "a. femorale perforanter"
+        },
+        {
+            name: "m. biceps femoris caput longum",
+            origin: "tuber ischiadicum",
+            insertion: "caput fibulae",
+            function: ["hip extension", "knee flexion", "knee external rotation"],
+            nerve: "n. tibialis",
+            artery: "a. femorale perforanter"
+        },
+        {
+            name: "m. semimembranosus",
+            origin: "tuber ischiadicum",
+            insertion: "condylus medialis tibiae",
+            function: ["hip extension", "knee flexion", "knee internal rotation"],
+            nerve: "n. tibialis",
+            artery: "a. femorale perforanter"
+        },
+        {
+            name: "m. semitendinosus",
+            origin: "tuber ischiadicum",
+            insertion: "medialt om tuberositas tibia (pes anserinus)",
+            function: ["hip extension", "knee flexion", "knee internal rotation"],
+            nerve: "n. tibialis",
+            artery: "a. femorale perforanter"
+        },
+        {
+            name: "m. popliteus",
+            origin: "epicondylus lateralis femoris",
+            insertion: "övre posteriora mediala tibia",
+            function: ["tibia internal rotation", "flexion"],
+            nerve: "n. tibialis",
+            artery: "a. poplitea"
+        },
+
+        // --- Anterior Leg ---
+        {
+            name: "m. tibialis anterior",
+            origin: "lateralt tibia, membrana interossea",
+            insertion: "os cuneiforme mediale, os metatarsale I",
+            function: ["dorsiflexion", "supination"],
+            nerve: "n. peroneus profundus",
+            artery: "a. tibialis anterior"
+        },
+        {
+            name: "m. extensor hallucis longus",
+            origin: "membrana interossea, fibula",
+            insertion: "stortåns ändfalang",
+            function: ["dorsiflexion", "big toe dorsiflexion"],
+            nerve: "n. peroneus profundus",
+            artery: "a. tibialis anterior"
+        },
+        {
+            name: "m. extensor digitorum longus",
+            origin: "laterala tibia condylen, membrana interossea, fibula",
+            insertion: "2-5 tårnas dorsal aponeuros",
+            function: ["dorsiflexion", "pronation", "toe dorsiflexion"],
+            nerve: "n. peroneus profundus",
+            artery: "a. tibialis anterior"
+        },
+
+        // --- Lateral Leg ---
+        {
+            name: "m. peroneus brevis",
+            origin: "fibula",
+            insertion: "tuberositas ossis metatarsalis V",
+            function: ["plantarflexion", "pronation"],
+            nerve: "n. peroneus superficialis",
+            artery: "a. peroneus"
+        },
+        {
+            name: "m. peroneus longus",
+            origin: "fibula",
+            insertion: "os cuneiforme mediale, os metatarsale I",
+            function: ["plantarflexion", "pronation"],
+            nerve: "n. peroneus superficialis",
+            artery: "a. peroneus"
+        },
+
+        // --- Posterior Superficial Leg ---
+        {
+            name: "m. gastrocnemius",
+            origin: "proximalt om condylus lateralis/medialis femoris",
+            insertion: "tuber calcanei",
+            function: ["knee flexion", "plantarflexion", "foot supination"],
+            nerve: "n. tibialis",
+            artery: "a. tibialis posterior"
+        },
+        {
+            name: "m. soleus",
+            origin: "caput fibula, posterior tibia",
+            insertion: "achillessenan, tuber calcanei",
+            function: ["plantarflexion", "foot supination"],
+            nerve: "n. tibialis",
+            artery: "a. tibialis posterior"
+        },
+        {
+            name: "m. plantaris",
+            origin: "proximalt om condylus lateralis femoris",
+            insertion: "achillessenan eller tuber calcanei",
+            function: ["knee flexion", "plantarflexion"],
+            nerve: "n. tibialis",
+            artery: "a. tibialis posterior"
+        },
+
+        // --- Posterior Deep Leg ---
+        {
+            name: "m. flexor hallucis longus",
+            origin: "fibula",
+            insertion: "stortåns ändfalang",
+            function: ["plantarflexion", "foot supination", "big toe plantarflexion"],
+            nerve: "n. tibialis",
+            artery: "a. peroneus"
+        },
+        {
+            name: "m. tibialis posterior",
+            origin: "tibia, fibula, membrana interossea",
+            insertion: "os naviculare, os cuneiforme mediale",
+            function: ["plantarflexion", "supination"],
+            nerve: "n. tibialis",
+            artery: "a. tibialis posterior"
+        },
+        {
+            name: "m. flexor digitorum longus",
+            origin: "tibia",
+            insertion: "2-5 tårnas ändfalanger",
+            function: ["plantarflexion", "foot supination", "toe plantarflexion"],
+            nerve: "n. tibialis",
+            artery: "a. tibialis posterior"
+        },
+
+        // --- Foot Sole (Fotsulan) ---
+        {
+            name: "m. abduktor digiti minimi",
+            origin: "calcaneus, plantaraponeurosen",
+            insertion: "lateralt på lilltåns grundfalang",
+            function: ["plantarflexion", "abduction"],
+            nerve: "n. plantare lateralis",
+            artery: "a. plantare lateralis"
+        },
+        {
+            name: "m. flexor digitorum brevis",
+            origin: "calcaneus, plantaraponeurosen",
+            insertion: "2-5 tårnas mellanfalanger",
+            function: ["plantarflexion"],
+            nerve: "n. plantare medialis",
+            artery: "a. plantare lateralis, a. plantare medialis"
+        },
+        {
+            name: "m. abduktor hallucis",
+            origin: "calcaneus",
+            insertion: "stortåns grundfalang",
+            function: ["abduction medialt"],
+            nerve: "n. plantare medialis",
+            artery: "a. plantare medialis"
+        },
+        {
+            name: "m. flexor accessorius",
+            origin: "calcaneus",
+            insertion: "lateralt på m. flexor digitorum longus sena",
+            function: ["stödjer fotvalvet (supports arch)"],
+            nerve: "n. plantare lateralis",
+            artery: "a. plantare lateralis"
+        },
+        {
+            name: "m. flexor hallucis brevis",
+            origin: "os cuneiforme mediale, aponeurosis plantaris",
+            insertion: "sesamben, stortåns grundfalang",
+            function: ["plantarflexion stortån"],
+            nerve: "n. plantare medialis",
+            artery: "a. plantare medialis"
+        },
+        {
+            name: "m. lumbricaler",
+            origin: "senor till m. flexor digitorum longus",
+            insertion: "baserna av 2-5 tårnas grundfalanger",
+            function: ["böjer i metatarsofalangeallederna"],
+            nerve: "n. plantare medialis, n. plantare lateralis",
+            artery: "a. plantare medialis"
+        },
+        {
+            name: "m. interossei dorsales",
+            origin: "tvåhövdade från ossa metatarsalia",
+            insertion: "grundfalangerna 2-5 tårna",
+            function: ["abducerar", "böjer i metatarsofalangeallederna"],
+            nerve: "n. plantare lateralis",
+            artery: "a. metatarsale dorsale"
+        },
+        {
+            name: "m. interossei plantares",
+            origin: "enhövdade från ossa metatarsalia 3-5",
+            insertion: "baserna på grundfalangerna",
+            function: ["adducerar", "böjer i metatarsofalangeallederna"],
+            nerve: "n. plantare lateralis",
+            artery: "a. metatarsale plantare"
+        }
+    ];
+
+    // --- GAME LOGIC ---
+
+    let score = 0;
+    let questionsAnswered = 0;
+    let currentQuestion = null;
+
+    // DOM Elements
+    const qTypeEl = document.getElementById('q-type');
+    const qTextEl = document.getElementById('q-text');
+    const optionsArea = document.getElementById('options-area');
+    const nextBtn = document.getElementById('next-btn');
+    const submitBtn = document.getElementById('submit-btn');
+    const feedbackEl = document.getElementById('feedback');
+    const scoreEl = document.getElementById('score-display');
+    const totalEl = document.getElementById('total-display');
+
+    function shuffle(array) {
+        return array.sort(() => Math.random() - 0.5);
+    }
+
+    function getRandomItem(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    // Get a set of random wrong answers for standard questions
+    function getWrongOptions(correctVal, type) {
+        let allValues = muscles.map(m => m[type]).filter(v => v !== correctVal);
+        allValues = [...new Set(allValues)]; // remove duplicates
+        return shuffle(allValues).slice(0, 3);
+    }
+
+    function generateQuestion() {
+        // Reset UI
+        feedbackEl.style.display = 'none';
+        feedbackEl.className = 'feedback-area';
+        nextBtn.style.display = 'none';
+        submitBtn.style.display = 'none';
+        optionsArea.innerHTML = '';
+        
+        // Pick random muscle
+        const muscle = getRandomItem(muscles);
+        
+        // Pick random question type
+        const types = ['origin', 'insertion', 'nerve', 'artery', 'function'];
+        const type = getRandomItem(types);
+
+        currentQuestion = {
+            muscle: muscle,
+            type: type,
+            correct: muscle[type]
+        };
+
+        // Render Question Text. Use <b> for the question part, and <i> with class 'highlight' for the muscle name.
+        qTextEl.innerHTML = `What is the <b>${type.toUpperCase()}</b> of the <i class="highlight">${muscle.name}</i>?`;
+        qTypeEl.innerText = `MUSCLE ${type.toUpperCase()}`;
+
+        if (type === 'function') {
+            setupFunctionQuestion(muscle);
+        } else {
+            setupStandardQuestion(muscle, type);
+        }
+    }
+
+    function setupStandardQuestion(muscle, type) {
+        const correct = muscle[type];
+        const wrong = getWrongOptions(correct, type);
+        const options = shuffle([correct, ...wrong]);
+
+        options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'choice-btn';
+            btn.innerText = opt;
+            btn.onclick = () => checkStandardAnswer(opt, btn);
+            optionsArea.appendChild(btn);
+        });
+    }
+
+    function setupFunctionQuestion(muscle) {
+        // Gather all unique functions from DB for distractors
+        let allFuncs = [];
+        muscles.forEach(m => m.function.forEach(f => allFuncs.push(f)));
+        allFuncs = [...new Set(allFuncs)]; // Unique list
+        
+        const correctFuncs = muscle.function;
+        // Get 5 random wrong functions
+        let wrongFuncs = allFuncs.filter(f => !correctFuncs.includes(f));
+        wrongFuncs = shuffle(wrongFuncs).slice(0, 5);
+
+        // Mix and Render
+        const allOptions = shuffle([...correctFuncs, ...wrongFuncs]);
+
+        qTextEl.innerHTML = `Select ALL correct <b>FUNCTIONS</b> for <i class="highlight">${muscle.name}</i>:`;
+        
+        allOptions.forEach(opt => {
+            const label = document.createElement('label');
+            label.className = 'checkbox-label';
+            label.innerHTML = `<input type="checkbox" value="${opt}" name="func-opt"> ${opt}`;
+            optionsArea.appendChild(label);
+        });
+
+        submitBtn.style.display = 'block';
+    }
+
+    function checkStandardAnswer(selected, btn) {
+        if(nextBtn.style.display === 'block') return; // Prevent double clicks
+
+        const isCorrect = selected === currentQuestion.correct;
+        
+        // Visuals
+        const allBtns = document.querySelectorAll('.choice-btn');
+        allBtns.forEach(b => {
+            b.disabled = true;
+            if(b.innerText === currentQuestion.correct) b.classList.add('correct');
+            if(b === btn && !isCorrect) b.classList.add('wrong');
+        });
+
+        showFeedback(isCorrect);
+    }
+
+    function checkFunctionAnswer() {
+        const checkboxes = document.querySelectorAll('input[name="func-opt"]');
+        const correctSet = new Set(currentQuestion.correct);
+        
+        let allCorrectlySelected = true;
+        let anyWrongSelected = false;
+
+        checkboxes.forEach(cb => {
+            const parent = cb.parentElement;
+            cb.disabled = true;
+            
+            if (cb.checked) {
+                if (correctSet.has(cb.value)) {
+                    parent.classList.add('correct-highlight');
+                } else {
+                    parent.classList.add('wrong-highlight');
+                    anyWrongSelected = true;
+                }
+            } else {
+                // Should have checked this?
+                if (correctSet.has(cb.value)) {
+                    parent.style.border = "2px dashed var(--success)"; // Hint they missed it
+                    allCorrectlySelected = false;
+                }
+            }
+        });
+
+        const isCorrect = allCorrectlySelected && !anyWrongSelected;
+        submitBtn.style.display = 'none';
+        showFeedback(isCorrect);
+    }
+
+    function showFeedback(isCorrect) {
+        questionsAnswered++;
+        totalEl.innerText = questionsAnswered;
+
+        feedbackEl.style.display = 'block';
+        if (isCorrect) {
+            score++;
+            scoreEl.innerText = score;
+            feedbackEl.className = 'feedback-area feedback-correct';
+            feedbackEl.innerHTML = `<strong>Correct!</strong> Great job.`;
+        } else {
+            feedbackEl.className = 'feedback-area feedback-wrong';
+            // Format correct answer for display
+            let answerText = currentQuestion.type === 'function' 
+                ? currentQuestion.correct.join(", ") 
+                : currentQuestion.correct;
+            feedbackEl.innerHTML = `<strong>Incorrect.</strong><br>The correct answer is: <br><em>${answerText}</em>`;
+        }
+
+        nextBtn.style.display = 'block';
+    }
+
+    function nextQuestion() {
+        generateQuestion();
+    }
+
+    function endQuiz() {
+        document.getElementById('quiz-container').style.display = 'none';
+        document.getElementById('results-container').style.display = 'block';
+        
+        const finalScoreEl = document.getElementById('final-score');
+        const percentage = questionsAnswered === 0 ? 0 : Math.round((score / questionsAnswered) * 100);
+        
+        finalScoreEl.innerText = `${percentage}%`;
+        document.getElementById('final-correct').innerText = score;
+        document.getElementById('final-total').innerText = questionsAnswered;
+    }
+
+    // Start App
+    generateQuestion();
+
+</script>
+
+</body>
+</html>
